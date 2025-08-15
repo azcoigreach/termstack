@@ -1,0 +1,134 @@
+# Zsh configuration with Starship prompt
+# Source this file in your ~/.zshrc
+
+# Initialize Starship prompt with error handling
+if command -v starship &> /dev/null; then
+    eval "$(starship init zsh)"
+else
+    echo "Warning: Starship not found. Please install it from https://starship.rs/install"
+fi
+
+# History configuration
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+setopt sharehistory
+setopt extendedhistory
+
+# Better tab completion
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# Auto-suggestions (if available)
+if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# Syntax highlighting (if available)
+if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# Useful aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# Git aliases
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline'
+alias gd='git diff'
+
+# Function to create and navigate to directories
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Function to extract various archive formats
+extract() {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1     ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1     ;;
+            *.rar)       unrar e $1     ;;
+            *.gz)        gunzip $1      ;;
+            *.tar)       tar xf $1      ;;
+            *.tbz2)      tar xjf $1     ;;
+            *.tgz)       tar xzf $1     ;;
+            *.zip)       unzip $1       ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1        ;;
+            *)           echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Set PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Set default editor
+export EDITOR=nano
+export VISUAL=nano
+
+# Zsh-specific options
+setopt autocd
+setopt extendedglob
+setopt nomatch
+setopt notify
+unsetopt beep
+
+# Key bindings
+bindkey -e
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# History search
+autoload -Uz up-line-or-beginning-search
+autoload -Uz down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+
+# Color support for ls
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# Zsh prompt customization (fallback if Starship fails)
+if ! command -v starship &> /dev/null; then
+    autoload -Uz promptinit
+    promptinit
+    prompt adam1
+fi
+
+# Load version control information
+autoload -Uz vcs_info
+precmd() { vcs_info }
+
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats 'on branch %b'
+zstyle ':vcs_info:*' enable git
+
+# Set up the prompt (if Starship fails)
+if ! command -v starship &> /dev/null; then
+    setopt PROMPT_SUBST
+    PROMPT='%F{green}%n@%m%f:%F{blue}%~%f$ '
+    RPROMPT='%F{red}${vcs_info_msg_0_}%f'
+fi

@@ -1,9 +1,183 @@
+# Starship Configuration - Informative, Color-coded, Nerd Font Driven
+# Works with bash, fish, and zsh
+
+# Global settings
 add_newline = false
+scan_timeout = 30
+command_timeout = 500
 
+# Character prompt
 [character]
-success_symbol = "[✔](bold green) "
-error_symbol = "[✘](bold red) "
+success_symbol = "[❯](bold green)"
+error_symbol = "[✗](bold red)"
+vicmd_symbol = "[❮](bold blue)"
 
+# Command duration
 [cmd_duration]
 min_time = 500
-format = "took [$duration]($style) "
+format = "took [$duration](yellow) "
+style = "yellow"
+
+# Directory
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+truncate_to_repo = true
+style = "blue bold"
+
+# Git
+[git_branch]
+symbol = " "
+truncation_length = 4
+truncation_symbol = ""
+style = "bright-purple bold"
+
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+style = "red bold"
+conflicted = "⚡"
+ahead = "⇡$${count}"
+behind = "⇣$${count}"
+diverged = "⇕⇡$${ahead_count}⇣$${behind_count}"
+untracked = "?"
+stashed = "≡"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+# Python
+[python]
+symbol = "🐍 "
+pyenv_version_name = true
+pyenv_prefix = " "
+style = "bright-yellow bold"
+
+# Node.js
+[nodejs]
+symbol = " "
+style = "bright-green bold"
+
+# Rust
+[rust]
+symbol = "🦀 "
+style = "bright-red bold"
+
+# Go
+[golang]
+symbol = "🐹 "
+style = "bright-cyan bold"
+
+# Docker
+[docker_context]
+symbol = "🐳 "
+style = "bright-blue bold"
+
+# Kubernetes
+[kubernetes]
+symbol = "☸ "
+style = "bright-purple bold"
+context_aliases = {}
+user_aliases = {}
+format = "on [$symbol$context( \\($namespace\\))]($style) "
+
+# AWS
+[aws]
+symbol = "☁️ "
+style = "bright-yellow bold"
+format = "on [$symbol$profile(\\($region\\))]($style) "
+
+# Terraform
+[terraform]
+symbol = "💠 "
+style = "bright-purple bold"
+
+# Package
+[package]
+symbol = "📦 "
+style = "bright-magenta bold"
+
+# Time
+[time]
+disabled = false
+format = "🕙[ $time ]($style) "
+time_format = "%T"
+style = "bright-white bold"
+
+# Battery
+[battery]
+full_symbol = "🔋"
+charging_symbol = "⚡"
+discharging_symbol = "💀"
+unknown_symbol = "❓"
+empty_symbol = "🪫"
+format = "[$symbol$percentage]($style) "
+disabled = false
+
+# Memory
+[memory_usage]
+symbol = "🐏 "
+style = "bright-white bold"
+format = "mem [$symbol${ram_pct}]($style) "
+threshold = 75
+disabled = false
+
+# CPU
+[cpu_arch]
+symbol = "🖥️ "
+style = "bright-yellow bold"
+
+# Username
+[username]
+style_user = "bright-white bold"
+style_root = "bright-red bold"
+format = "[$user]($style) "
+disabled = false
+show_always = false
+
+# Hostname
+[hostname]
+ssh_symbol = "🌐 "
+style = "bright-green bold"
+format = "on [$hostname]($style) "
+disabled = false
+
+# Jobs
+[jobs]
+symbol = "✦ "
+style = "bright-blue bold"
+format = "[$symbol$number]($style) "
+disabled = false
+
+# Status
+[status]
+symbol = "❌ "
+style = "bright-red bold"
+format = "[$symbol$status]($style) "
+disabled = false
+
+# Exit code
+[exit_code]
+symbol = "💥 "
+style = "bright-red bold"
+disabled = false
+
+# Custom modules for enhanced information
+[env_var]
+variable = "VIRTUAL_ENV"
+format = "via [🐍 $env_value]($style) "
+style = "bright-yellow bold"
+
+[conda]
+format = "via [🐍 $environment]($style) "
+style = "bright-yellow bold"
+
+[spack]
+format = "via [$environment]($style) "
+style = "bright-yellow bold"
+
+# Main prompt configuration
+format = "$username$hostname$directory$git_branch$git_status$python$nodejs$rust$golang$docker_context$kubernetes$aws$terraform$package$memory_usage$battery$time$jobs$status$exit_code$character"
+
+# Right prompt
+right_format = "$cmd_duration"

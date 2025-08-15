@@ -32,7 +32,7 @@ install_zsh() {
 install_fish() {
   sudo apt-get install -y fish
   if ! command -v fisher >/dev/null 2>&1; then
-    curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+    curl -sL https://git.io/fisher | fish && fisher install jorgebucaran/fisher
   fi
 }
 

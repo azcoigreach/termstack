@@ -22,7 +22,6 @@ create_symlinks() {
 }
 
 install_zsh() {
-  sudo apt-get install -y zsh
   if [ ! -f "${ZDOTDIR:-$HOME}/.zinit/bin/zinit.zsh" ]; then
     mkdir -p "${ZDOTDIR:-$HOME}/.zinit"
     git clone https://github.com/zdharma-continuum/zinit.git "${ZDOTDIR:-$HOME}/.zinit/bin"
